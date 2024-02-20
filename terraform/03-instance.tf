@@ -124,3 +124,13 @@ resource "aws_eip_association" "web_server_public_ip" {
   instance_id   = aws_instance.web_server[count.index].id
   allocation_id = aws_eip.web_server_public_ip[count.index].id
 }
+
+# Add Clouwatch agent to the instance to collect logs
+resource "aws_ssm_association" "cw_agent" {
+  count = length(aws_instance.web_server)
+  name  = "AmazonCloudWatch-ManageAgent"
+  targets {
+    key    = "InstanceIds"
+    values = [aws_instance.web_server[count.index].id]
+  }
+}
