@@ -1,0 +1,70 @@
+name: Terraform Plan and Apply
+# Only run apply on main branch
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches: [ main ]
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
+
+jobs:
+  terraform_plan:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./terraform
+
+    steps:
+    - uses: actions/checkout@v2
+      name: Check out repository
+
+    - uses: hashicorp/setup-terraform@v3
+
+    - name: Terraform Init
+      run: |
+        terraform --version
+        terraform init
+    
+    - name: Terraform Validate
+      run: |
+        terraform validate
+    
+    - name: Terraform Plan
+      run: |
+        terraform plan -var-file="env.tfvars"
+
+  terraform_apply:
+    runs-on: ubuntu-latest
+    environment: 'Deploy'
+    needs: [terraform_plan]
+
+    defaults:
+      run:
+        working-directory: ./terraform
+
+    steps:
+    - uses: actions/checkout@v2
+      name: Check out repository
+    
+    - name: Terraform Init
+      run: |
+        terraform --version
+        terraform init
+        
+    # Only run apply on main branch
+    - name: Terraform Apply
+      if: github.ref == 'refs/heads/main'
+      run: |
+        terraform apply -auto-approve -input=false -var-file="env.tfvars"
+      
+
+
+
+        
