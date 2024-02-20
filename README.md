@@ -7,8 +7,14 @@
 Successful execution IaC pipeline recorded here:
 https://github.com/dkoriadi/assessment/actions/runs/7968333224
 
-REST API accessible from endpoint:
+![Alt text](/screenshots/output_tf_apply.png?raw=true "tf apply out")
+
+REST API endpoint:
 http://proj-alb-1772570794.ap-southeast-1.elb.amazonaws.com/vend_ip
+
+![Alt text](/screenshots/output_subnet_1.png?raw=true "subnet 1")
+
+![Alt text](/screenshots/output_subnet_2.png?raw=true "subnet 2")
 
 The subnet IP address will be shown differently for each request as the request is load balanced across two different virtual machines.
 
