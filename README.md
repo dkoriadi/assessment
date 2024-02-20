@@ -43,8 +43,10 @@ Terraform creates the below infrastructure in AWS:
 
 - Security groups have been created both on the instances and load balancer with ingress/egress rules for certain ports only
 - Virtual machines (EC2 instances) are in different availability zones (multi-AZ) for high availability
-- For additional security, a SSL certificate should be installed on the load balancer to enable HTTPS.
-- For monitoring of infra health, the load balancer can be configured to include regular health checks to the virtual machines. Cloudwatch Agent can also be installed in the virtual machines to pipe `stdout` and `stderr` messages into Cloudwatch. 
+- The load balancer is configured to include regular health checks to the virtual machines.
+- Cloudwatch Agent is installed in the virtual machines to pipe web server logs into Cloudwatch. 
+- For additional security, a SSL certificate should be installed on the load balancer to enable HTTPS (requires additional costs for custom domain and cert)
+
 
 > Take into consideration coding/scripting practices
 
